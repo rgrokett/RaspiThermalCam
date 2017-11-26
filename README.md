@@ -8,11 +8,11 @@ The Adafruit AMG8833 IR Thermal Camera board can provide a “FLIR™”-like im
 
 Note that IR Thermal Cameras are NOT the same as NOIR cameras. The former uses only the heat given off by the object being imaged, while the latter requires an infrared light source such as IR LEDs to illuminate the object. 
 
-With this project, I took the excellent Adafruit tutorial [“Raspberry Pi Thermal Camera”] (https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) by Dean Miller and added extra functionality to the software and hardware.
+With this project, I took the excellent Adafruit tutorial [Raspberry Pi Thermal Camera](https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) by Dean Miller and added extra functionality to the software and hardware.
 
 The PiTFT display uses Adafruit's custom Linux Kernal. *(See below)* This project only needs the Jessie Lite-based PiTFT Resitive Image, as it does not use the GUI.
 
-###New features:
+### New features:
 - Safely shutdown/power up Raspberry
 - Automatically runs software at powerup
 - Battery Powered for portability
@@ -20,9 +20,9 @@ The PiTFT display uses Adafruit's custom Linux Kernal. *(See below)* This projec
 - Sensitivity controls
 - Potential for future additions
 
-###Requirements
+### Requirements
 **NOTE:** This project assumes the user has set up their Raspberry Pi using the Adafruit tutorial mentioned above, thus consists of:
-1. [“Raspberry Pi Thermal Camera”] (https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) 
+1. [Raspberry Pi Thermal Camera](https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) 
 - Adafruit AMG8833 IR Thermal Camera Breakout [ID 3538](https://www.adafruit.com/product/3538)
 2. It also specifically requires the Adafruit PiTFT Plus 2.8" 320x240 screen to be installed and running. 
 - [Required PiTFT Kernal Install](https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/easy-install)
@@ -35,13 +35,13 @@ The PiTFT display uses Adafruit's custom Linux Kernal. *(See below)* This projec
 - Adafruit 40 Pin GPIO Cable [ID 1988](https://www.adafruit.com/product/1988)
 - Adafruit 2X20 Pin IDC Box Header [ID 1993](https://www.adafruit.com/product/1993)
 
-###Extras
+### Extras
 - Faceplate and case for PiTFT and Raspberry Pi 3 [ID 2807](https://www.adafruit.com/product/2807)
 - 5V external USB Battery (such as external cellphone rechargeable) with 2 amp output
 - Box to hold battery, computer and camera 
 
-###Installation
-You MUST have the Adafruit tutorial version installed and working before using this. This project just replaces the Adafruit thermalcam.py with a new python program. IT WILL NOT WORK OTHERWISE. 
+### Installation
+You **MUST** have the Adafruit tutorial version installed and working before using this. This project just replaces the Adafruit thermalcam.py with a new python program. IT WILL NOT WORK OTHERWISE. 
 
 Also, it expects the assembled version of the Adafruit 2.8" 320x240 PiTFT Plus screen otherwise the screen layout will NOT ALIGN and the GPIO buttons will NOT FUNCTION as expected. The Raspbian GUI is NOT NEEDED, so uses their custom Jessie Lite. 
 
@@ -49,12 +49,12 @@ The camera should be facing forward, like a digital camera: LCD screen towards y
 
 1. Log into the Raspberry Pi with SSH or keyboard (defaults to "pi/raspberry")
 2. Download and install the enhanced thermal program:
-'''
+```
 git clone https://github.com/rgrokett/RaspiThermalCam.git
 cd RaspiThermalCam
 ./install.sh
 sudo reboot
-'''
+```
 
 Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if needed.  The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
 1. Safely Shutdown/Start up Raspberry (Does not remove 5V power, must be done usually via the 5V USB battery on/off switch)
@@ -62,21 +62,22 @@ Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if need
 3. Decrease Sensitivity (while in Camera Mode)
 4. Start/Stop Camera Mode
 
-###Future 
+### Future 
 - 3D Printed front case parts for the camera
 - Switch to using Raspberry Pi Zero W for lower cost & power/smaller size
 - Add new mode button features for middle buttons
 - Get pygame Touch Screen working for PiTFT
 - Add Camera Screen Snapshot feature
 
-###Troubleshooting
+### Troubleshooting
+
 **I don't see any new screen, only the boot messages and login.** 
 
 Did you run the ./install.sh script? 
 Try running $ crontab -l and see if you see a @reboot line:
-'''
+```
 @reboot sudo python /home/pi/RaspiThermalCam/raspitherm.py >/dev/null 2>&1
-''' 
+``` 
 You did set up your Pi Thermal Camera as detailed in the Adafruit tutorial https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera 
 
 **I get a python error message**
@@ -98,11 +99,11 @@ Press the Sensitivity buttons (middle two) to increase/decrease sensitivity
 **My Camera doesn't work**
 Try manually running tools/thermal_cam.py program. This is the same program from Adafruit with no modifications.
 You may need to kill the raspitherm.py program first by editing the crontab:
-'''
+```
 crontab -e
 comment out the @reboot line
 #@reboot ...
-'''
-** What can I see with it?**
+```
+**What can I see with it?**
 Find a cat. They glow hot!
 So do water heaters!
