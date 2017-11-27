@@ -10,7 +10,7 @@ Note that IR Thermal Cameras are NOT the same as NOIR cameras. The former uses o
 
 With this project, I took the excellent Adafruit tutorial [Raspberry Pi Thermal Camera](https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) by Dean Miller and added extra functionality to the software and hardware.
 
-The PiTFT display uses Adafruit's custom Linux Kernal. *(See below)* This project only needs the Jessie Lite-based PiTFT Resitive Image, as it does not use the GUI.
+The PiTFT display uses Adafruit's custom Linux Kernel. *(See below)* This project only needs the Jessie Lite-based PiTFT Resitive Image, as it does not use the GUI.
 
 ### New features:
 - Safely shutdown/power up Raspberry
@@ -19,6 +19,8 @@ The PiTFT display uses Adafruit's custom Linux Kernal. *(See below)* This projec
 - Uses PiTFT GPIO buttons
 - Sensitivity controls
 - Potential for future additions
+
+**See Full Instructions in the RaspiThermalCam.pdf document**
 
 ### Requirements
 **NOTE:** This project assumes the user has set up their Raspberry Pi using the Adafruit tutorial mentioned above, thus consists of:
@@ -56,7 +58,10 @@ cd RaspiThermalCam
 sudo reboot
 ```
 
-Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if needed.  The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
+Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if needed.  
+
+The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
+
 1. Safely Shutdown/Start up Raspberry (Does not remove 5V power, must be done usually via the 5V USB battery on/off switch)
 2. Increase Sensitivity (while in Camera Mode)
 3. Decrease Sensitivity (while in Camera Mode)
@@ -78,7 +83,7 @@ Try running $ crontab -l and see if you see a @reboot line:
 ```
 @reboot sudo python /home/pi/RaspiThermalCam/raspitherm.py >/dev/null 2>&1
 ``` 
-You did set up your Pi Thermal Camera as detailed in the Adafruit tutorial https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera 
+You did set up your Pi Thermal Camera as detailed in the [Adafruit tutorial](https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) 
 
 **I get a python error message**
 Most likely there is a missing python package. The last line of the Python error should say what is missing. Try Googling that message.
