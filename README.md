@@ -20,7 +20,7 @@ The PiTFT display uses Adafruit's custom Linux Kernel. *(See below)* This projec
 - Sensitivity controls
 - Potential for future additions
 
-**See Full Instructions in the RaspiThermalCam.pdf document**
+**See Full Instructions in the [RaspiThermalCam.pdf](https://github.com/rgrokett/RaspiThermalCam/raw/master/RaspiThermalCam.pdf) document**
 
 ### Requirements
 **NOTE:** This project assumes the user has set up their Raspberry Pi using the Adafruit tutorial mentioned above, thus consists of:
