@@ -10,6 +10,8 @@
 # Manually run using $ sudo python raspitherm.py
 #
 # Version 0.5 2017.11.26 - initial release
+#         0.6 2017.11.29 - added future touch screen (note that SDL library 
+#			   currently does not support the PiTFT screen)
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -18,15 +20,15 @@ from Adafruit_AMG88xx import Adafruit_AMG88xx
 import pygame
 import os
 import math
-import time
+import time, datetime
 import logging
-
+import subprocess
 import numpy as np
+import RPi.GPIO as GPIO
+
 from scipy.interpolate import griddata
 from pygame.locals import *
 from colour import Color
-
-import RPi.GPIO as GPIO
 
 
 ##### VARIABLES
@@ -75,13 +77,11 @@ def displayMode():
     logger.info('displayMode()')
     cleartft(BLACK)
     lcd = pygame.display.set_mode((F_WIDTH, F_HEIGHT))
-
     # Title Screen
     fnt = pygame.font.Font(None, 40)
     txt = fnt.render('PiEyeR Camera',True,CYAN)
     lcd.blit(txt, (10,10))
     pygame.draw.lines(lcd,WHITE,False, [(10,50),(210,50)])
-
     # Info Box
     pygame.draw.rect(lcd,BLUE,[(10,60),(200,180)])
     pygame.draw.rect(lcd,WHITE,[(10,60),(200,180)],1)
@@ -96,7 +96,6 @@ def displayMode():
     lcd.blit(txt, (30,150))
     txt = fnt.render('CAM    = Camera Mode',True,CYAN)
     lcd.blit(txt, (30,170))
-    
     # Function Buttons
     font_big = pygame.font.Font(None, 25)
     mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'CAM ->':(280,220)}
@@ -105,6 +104,37 @@ def displayMode():
         rect = text_surface.get_rect(center=v)
         lcd.blit(text_surface, rect)
     pygame.display.update()
+
+# TouchScreen (future)
+# Checks for screen touch
+# Note: due to bug in SDL lib with pygame, touchscreen DOES NOT WORK YET
+def touch():
+    logger.info('touch()')
+    for event in pygame.event.get():
+        if(event.type is MOUSEBUTTONDOWN):
+	    pos = pygame.mouse.get_pos()
+            logger.info('mousedown')
+	    time.sleep(0.1)
+        elif(event.type is MOUSEBUTTONUP):
+	    pos = pygame.mouse.get_pos()
+            logger.info('mouseup')
+	    screensnap()
+	    break
+    
+# Screen snapshot (future)
+def screensnap():
+    logger.info('screensnap()')
+    cur_date = datetime.datetime.now().strftime('%Y%m%d%H%M%S') 
+    filename="/home/pi/snapshot/"+cur_date+".png"
+    subprocess.call(["sudo","fbgrab","-d","/dev/fb1",filename])
+    time.sleep(0.2)
+    lcd = pygame.display.set_mode((width, height))
+    lcd.fill(WHITE)
+    pygame.display.update()
+    time.sleep(0.2)
+    lcd.fill(BLUE)
+    pygame.display.update()
+    time.sleep(0.2)
 
 # TODO FUTURE FEATURES
 def future(msg):
@@ -131,10 +161,8 @@ def camera():
 	#read the pixels
 	pixels = sensor.readPixels()
 	pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels]
-	
 	#perdorm interpolation
 	bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
-	
 	#draw everything
 	for ix, row in enumerate(bicubic):
 		for jx, pixel in enumerate(row):
@@ -144,8 +172,7 @@ def camera():
 	surf = pygame.transform.flip(lcd,True,False)
 	lcd.blit(surf,(0,0))
 	pygame.display.update()
-
-	# GPIO Button Press to exit
+	# GPIO Button Press 
 	if GPIO.input(BTN4) == GPIO.LOW:
 		logger.info("stopping camera()")
 		loop = 0
@@ -158,6 +185,8 @@ def camera():
 		logger.info("DOWN")
 		offset = offset + 1
 		time.sleep(0.5)	
+	# Touch Screen Snapshot
+	#touch() (future)
 
 
 ######
@@ -179,6 +208,7 @@ logger.addHandler(handler)
 logger.info('Starting')
 
 # Setup OS Env
+os.putenv('SDL_VIDEODRIVER', 'fbcon')
 os.putenv('SDL_FBDEV', '/dev/fb1')
 os.putenv('SDL_MOUSEDRV', 'TSLIB')
 os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')

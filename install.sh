@@ -6,10 +6,12 @@
 #
 # Can be safely run multiple times
 #
+# version 20171127
+#
 
 # Make sure python requirements are installed
 sudo apt-get install -y build-essential python-pip python-dev python-smbus 
-sudo apt-get install -y python-scipy python-pygame
+sudo apt-get install -y python-scipy python-pygame fbcat
 
 echo 
 
@@ -77,6 +79,10 @@ fi
 
 crontab ./cronfile
 echo "Crontab entry installed for pi userid. OK"
+
+# DIRECTORY FOR SCREENSHOTS (future)
+mkdir -p /home/pi/snapshot
+
 
 # FINISHED!
 echo "Finished installation. See Readme.md for more info"
