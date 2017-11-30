@@ -67,8 +67,10 @@ The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
 3. Decrease Sensitivity (while in Camera Mode)
 4. Start/Stop Camera Mode
 
+
+The stl/ subdirectory contains 3D Printed front case parts for the camera. See the PDF document for details.
+
 ### Future 
-- 3D Printed front case parts for the camera
 - Switch to using Raspberry Pi Zero W for lower cost & power/smaller size
 - Add new mode button features for middle buttons
 - Get pygame Touch Screen working for PiTFT
