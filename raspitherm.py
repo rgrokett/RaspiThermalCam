@@ -10,8 +10,7 @@
 # Manually run using $ sudo python raspitherm.py
 #
 # Version 0.5 2017.11.26 - initial release
-#         0.6 2017.11.29 - added future touch screen (note that SDL library 
-#			   currently does not support the PiTFT screen)
+#         0.7 2017.12.01 - added touch screen snapshots (via workaround) 
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -96,8 +95,12 @@ def displayMode():
     lcd.blit(txt, (30,150))
     txt = fnt.render('CAM    = Camera Mode',True,CYAN)
     lcd.blit(txt, (30,170))
+    txt = fnt.render('Touch Screen for Snapshot',True,WHITE)
+    lcd.blit(txt, (30,190))
     # Function Buttons
     font_big = pygame.font.Font(None, 25)
+    # The UP/DOWN text can be updated for supporting future features
+    # They are separate from the camera sensitivity buttons.
     mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'CAM ->':(280,220)}
     for k,v in mode_buttons.items():
         text_surface = font_big.render('%s'%k, True, WHITE)
@@ -105,9 +108,9 @@ def displayMode():
         lcd.blit(text_surface, rect)
     pygame.display.update()
 
-# TouchScreen (future)
+# TouchScreen - using pygame
 # Checks for screen touch
-# Note: due to bug in SDL lib with pygame, touchscreen DOES NOT WORK YET
+'''
 def touch():
     logger.info('touch()')
     for event in pygame.event.get():
@@ -120,8 +123,21 @@ def touch():
             logger.info('mouseup')
 	    screensnap()
 	    break
+''' and None
+
+# TouchScreen - using tslib and custom pgm (workaround)
+# due to bug in SDL lib with using pygame.
+# Checks for screen touch
+def touch():
+    logger.info('touch()')
+    xy = subprocess.check_output(["ts_check"])
+    if(xy):
+	logger.info('screen touched'+str(xy))
+	screensnap()
     
-# Screen snapshot (future)
+# Screen snapshot 
+# Snapshots go into snapshot subdirectory
+# (Future: add transfer mechanism)
 def screensnap():
     logger.info('screensnap()')
     cur_date = datetime.datetime.now().strftime('%Y%m%d%H%M%S') 
@@ -186,7 +202,7 @@ def camera():
 		offset = offset + 1
 		time.sleep(0.5)	
 	# Touch Screen Snapshot
-	#touch() (future)
+	touch() 
 
 
 ######

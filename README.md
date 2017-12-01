@@ -1,7 +1,7 @@
 # PiEyeR RaspiThermalCam
 ## Portable Raspberry Pi AMG8833 Grid-Eye IR Thermal Camera
 
-version 0.5 - 2017-11-26
+version 0.7 - 2017-12-01
 
 ### Overview
 The Adafruit AMG8833 IR Thermal Camera board can provide a “FLIR™”-like imaging camera at about 1/10th the price of previous IR Thermal imaging units.  Of course, the resolution and sensitivity are not as high as more advanced cameras, but hey, for $39 it’s a great deal.  
@@ -67,14 +67,29 @@ The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
 3. Decrease Sensitivity (while in Camera Mode)
 4. Start/Stop Camera Mode
 
+### Snapshot
+Due to a bug in the Python SDL library, the touch screen doesn’t currently work with PyGame software.  So I used the tslib and a small custom C program to detect screen touches.
 
+To take a screenshot of a thermal image, just touch anywhere on the touch screen.  The screen will flash to let you know an image has been taken.
+Images are saved to the /home/pi/snapshot subdirectory as  PNG files. These can be transferred to your PC using:
+
+Mac/Linux:
+$ scp pi@YOUR_IP_ADDRESS :/home/pi/snapshot/*.png .
+
+Windows:
+Use WinSCP program https://winscp.net/eng/download.php
+Connect using SFTP with user name pi and Host name YOUR_IP_ADDRESS
+Navigate to snapshot folder and select and download to your PC.
+
+### 3D Print Case (early version)
 The stl/ subdirectory contains 3D Printed front case parts for the camera. See the PDF document for details.
+
 
 ### Future 
 - Switch to using Raspberry Pi Zero W for lower cost & power/smaller size
 - Add new mode button features for middle buttons
 - Get pygame Touch Screen working for PiTFT
-- Add Camera Screen Snapshot feature
+
 
 ### Troubleshooting
 

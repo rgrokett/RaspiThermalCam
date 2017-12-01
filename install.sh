@@ -12,6 +12,7 @@
 # Make sure python requirements are installed
 sudo apt-get install -y build-essential python-pip python-dev python-smbus 
 sudo apt-get install -y python-scipy python-pygame fbcat
+sudo apt-get install evtest tslib libts-bin
 
 echo 
 
@@ -80,6 +81,8 @@ fi
 crontab ./cronfile
 echo "Crontab entry installed for pi userid. OK"
 
+
+sudo cp ts_check /usr/local/bin/
 # DIRECTORY FOR SCREENSHOTS (future)
 mkdir -p /home/pi/snapshot
 
