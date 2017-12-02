@@ -18,11 +18,15 @@ The PiTFT display uses Adafruit's custom Linux Kernel. *(See below)* This projec
 - Battery Powered for portability
 - Uses PiTFT GPIO buttons
 - Sensitivity controls
+- Screen snapshots
 - Potential for future additions
+
 
 **See Full Instructions in the [RaspiThermalCam.pdf](https://github.com/rgrokett/RaspiThermalCam/raw/master/RaspiThermalCam.pdf) document**
 
-### Requirements
+
+
+### Requirements (summary)
 **NOTE:** This project assumes the user has set up their Raspberry Pi using the Adafruit tutorial mentioned above, thus consists of:
 1. [Raspberry Pi Thermal Camera](https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/raspberry-pi-thermal-camera) 
 - Adafruit AMG8833 IR Thermal Camera Breakout [ID 3538](https://www.adafruit.com/product/3538)

@@ -9,8 +9,11 @@
 # Turn off by commenting out @reboot... using $ crontab -e; sudo reboot
 # Manually run using $ sudo python raspitherm.py
 #
+# NOTICE: This is designed for a 320x240 screen only!
+#
 # Version 0.5 2017.11.26 - initial release
 #         0.7 2017.12.01 - added touch screen snapshots (via workaround) 
+#         0.8 2017.12.02 - expanded camera screen added data 
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -51,8 +54,9 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 BLUE  = (0,0,255)
 YELLOW= (255,255,0)
-CYAN  = (255,255,0)
+CYAN  = (0,255,255)
 RED   = (255,0,0)
+GRAY  = (128,128,128)
 
 F_WIDTH  = 320
 F_HEIGHT = 240
@@ -101,15 +105,17 @@ def displayMode():
     font_big = pygame.font.Font(None, 25)
     # The UP/DOWN text can be updated for supporting future features
     # They are separate from the camera sensitivity buttons.
-    mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'CAM ->':(280,220)}
+    #mode_buttons = {'Power ->':(270,40),'Future->':(270,100),'Future->':(270,160),'Camera->':(270,220)}
+    mode_buttons = {'PWR ->':(280,40), 'DATA->':(280,100), 'IMAG->':(280,160), 'CAM ->':(280,220)}
     for k,v in mode_buttons.items():
-        text_surface = font_big.render('%s'%k, True, WHITE)
+        text_surface = font_big.render('%s'%k, True, YELLOW)
         rect = text_surface.get_rect(center=v)
         lcd.blit(text_surface, rect)
     pygame.display.update()
 
-# TouchScreen - using pygame
+# TouchScreen - using pygame (current not working)
 # Checks for screen touch
+# commented out
 '''
 def touch():
     logger.info('touch()')
@@ -144,7 +150,7 @@ def screensnap():
     filename="/home/pi/snapshot/"+cur_date+".png"
     subprocess.call(["sudo","fbgrab","-d","/dev/fb1",filename])
     time.sleep(0.2)
-    lcd = pygame.display.set_mode((width, height))
+    lcd = pygame.display.set_mode((F_WIDTH, F_HEIGHT))
     lcd.fill(WHITE)
     pygame.display.update()
     time.sleep(0.2)
@@ -167,19 +173,20 @@ def future(msg):
 # IR Thermal Camera
 def camera():
     logger.info('camera()')
-    lcd = pygame.display.set_mode((width, height))
+    lcd = pygame.display.set_mode((F_WIDTH, F_HEIGHT))
     lcd.fill(BLUE)
     pygame.display.update()
     time.sleep(0.5)	
-    offset = 0
+    offset = 0	
     loop = 1
     while (loop):
 	#read the pixels
-	pixels = sensor.readPixels()
-	pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels]
-	#perdorm interpolation
+	pixels_d = sensor.readPixels()
+	# Remap pixels
+	pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
+	#Perform interpolation
 	bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
-	#draw everything
+	#Draw Image
 	for ix, row in enumerate(bicubic):
 		for jx, pixel in enumerate(row):
 			pygame.draw.rect(lcd, colors[constrain(int(pixel), 0, COLORDEPTH- 1)], (displayPixelHeight * ix, displayPixelWidth * jx, displayPixelHeight, displayPixelWidth))
@@ -187,6 +194,24 @@ def camera():
 	# Flip the screen horizontally to match front facing IP camera
 	surf = pygame.transform.flip(lcd,True,False)
 	lcd.blit(surf,(0,0))
+	# Add buttons
+        fnt = pygame.font.Font(None, 15)
+        mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
+        for k,v in mode_buttons.items():
+            text_surface = fnt.render('%s'%k, True, GRAY)
+            rect = text_surface.get_rect(center=v)
+            lcd.blit(text_surface, rect)
+	# Add Data to screen
+        fnt = pygame.font.Font(None, 15)
+	text = "Range= {0:.0f}-{1:.0f} C".format(MINTEMP+offset,MAXTEMP+offset)
+        text_surface = fnt.render(text, True, GRAY)
+        lcd.blit(text_surface, (10,220))
+	text = "Min  = {0:.0f} C".format(min(pixels_d))
+        text_surface = fnt.render(text, True, GRAY)
+        lcd.blit(text_surface, (10,20))
+	text = "Max = {0:.0f} C".format(max(pixels_d))
+        text_surface = fnt.render(text, True, GRAY)
+        lcd.blit(text_surface, (10,30))
 	pygame.display.update()
 	# GPIO Button Press 
 	if GPIO.input(BTN4) == GPIO.LOW:
@@ -242,7 +267,7 @@ sensor = Adafruit_AMG88xx()
 points = [(math.floor(ix / 8), (ix % 8)) for ix in range(0, 64)]
 grid_x, grid_y = np.mgrid[0:7:32j, 0:7:32j]
 
-height = 240
+height = 320
 width = 240
 
 # Set Color range
