@@ -14,6 +14,7 @@
 # Version 0.5 2017.11.26 - initial release
 #         0.7 2017.12.01 - added touch screen snapshots (via workaround) 
 #         0.8 2017.12.02 - expanded camera screen added data 
+#	  0.8.1 - minor update to screen data format
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -177,6 +178,7 @@ def camera():
     lcd.fill(BLUE)
     pygame.display.update()
     time.sleep(0.5)	
+    showBtns = 0
     offset = 0	
     loop = 1
     while (loop):
@@ -194,17 +196,19 @@ def camera():
 	# Flip the screen horizontally to match front facing IP camera
 	surf = pygame.transform.flip(lcd,True,False)
 	lcd.blit(surf,(0,0))
-	# Add buttons
-        fnt = pygame.font.Font(None, 15)
-        mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
-        for k,v in mode_buttons.items():
-            text_surface = fnt.render('%s'%k, True, GRAY)
-            rect = text_surface.get_rect(center=v)
-            lcd.blit(text_surface, rect)
+	# Add buttons (show for X seconds)
+	if (showBtns < 25):
+            fnt = pygame.font.Font(None, 15)
+            mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
+            for k,v in mode_buttons.items():
+                text_surface = fnt.render('%s'%k, True, GRAY)
+                rect = text_surface.get_rect(center=v)
+                lcd.blit(text_surface, rect)
+	showBtns = showBtns + 1
 	# Add Data to screen
         fnt = pygame.font.Font(None, 15)
-	text = "Range= {0:.0f}-{1:.0f} C".format(MINTEMP+offset,MAXTEMP+offset)
-        text_surface = fnt.render(text, True, GRAY)
+        cur_date = datetime.datetime.now().strftime('%a  %d  %b %H : %M : %S %Z %Y') 
+        text_surface = fnt.render(cur_date, True, GRAY)
         lcd.blit(text_surface, (10,220))
 	text = "Min  = {0:.0f} C".format(min(pixels_d))
         text_surface = fnt.render(text, True, GRAY)
@@ -221,10 +225,12 @@ def camera():
 	if GPIO.input(BTN2) == GPIO.LOW:
 		logger.info("UP")
 		offset = offset - 1
+    		showBtns = 0
 		time.sleep(0.5)	
 	if GPIO.input(BTN3) == GPIO.LOW:
 		logger.info("DOWN")
 		offset = offset + 1
+    		showBtns = 0
 		time.sleep(0.5)	
 	# Touch Screen Snapshot
 	touch() 
