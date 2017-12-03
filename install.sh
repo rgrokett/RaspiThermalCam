@@ -6,10 +6,11 @@
 #
 # Can be safely run multiple times
 #
-# version 20171127
+# version 20171203
 #
 
 # Make sure python requirements are installed
+sudo apt-get update
 sudo apt-get install -y build-essential python-pip python-dev python-smbus 
 sudo apt-get install -y python-scipy python-pygame fbcat
 sudo apt-get install evtest tslib libts-bin
@@ -82,10 +83,15 @@ crontab ./cronfile
 echo "Crontab entry installed for pi userid. OK"
 
 
-sudo cp ts_check /usr/local/bin/
-# DIRECTORY FOR SCREENSHOTS (future)
-mkdir -p /home/pi/snapshot
+# Install tslib touchscreen libs & pgm
+sudo cp tslib/pointercal /usr/local/etc/
+sudo cp tslib/ts.conf /usr/local/etc/
+sudo cp tslib/ts_check /usr/local/bin/
+sudo cp -rp tslib/ts /usr/local/lib/
+sudo cp -P tslib/libts.so.0.9.0 /usr/lib/arm-linux-gnueabihf/libts.so.0
 
+# DIRECTORY FOR SCREENSHOTS 
+mkdir -p /home/pi/snapshot
 
 # FINISHED!
 echo "Finished installation. See Readme.md for more info"

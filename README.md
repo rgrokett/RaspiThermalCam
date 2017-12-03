@@ -1,7 +1,7 @@
 # PiEyeR RaspiThermalCam
 ## Portable Raspberry Pi AMG8833 Grid-Eye IR Thermal Camera
 
-version 0.8.1 - 2017-12-03
+version 0.8.2 - 2017-12-03
 
 ### Overview
 The Adafruit AMG8833 IR Thermal Camera board can provide a “FLIR™”-like imaging camera at about 1/10th the price of previous IR Thermal imaging units.  Of course, the resolution and sensitivity are not as high as more advanced cameras, but hey, for $39 it’s a great deal.  
@@ -24,6 +24,9 @@ The PiTFT display uses Adafruit's custom Linux Kernel. *(See below)* This projec
 
 **See Full Instructions in the [RaspiThermalCam.pdf](https://github.com/rgrokett/RaspiThermalCam/raw/master/RaspiThermalCam.pdf) document**
 
+
+
+Zero Owners:  A Raspberry Pi Zero can be used instead of a Pi 3, sacrificing speed. See the subdirectory RaspiThermalCam/Zero for details.
 
 
 ### Requirements (summary)
