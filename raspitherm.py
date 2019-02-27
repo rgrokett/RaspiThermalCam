@@ -122,14 +122,14 @@ def touch():
     logger.info('touch()')
     for event in pygame.event.get():
         if(event.type is MOUSEBUTTONDOWN):
-	    pos = pygame.mouse.get_pos()
+            pos = pygame.mouse.get_pos()
             logger.info('mousedown')
-	    time.sleep(0.1)
+            time.sleep(0.1)
         elif(event.type is MOUSEBUTTONUP):
-	    pos = pygame.mouse.get_pos()
+            pos = pygame.mouse.get_pos()
             logger.info('mouseup')
-	    screensnap()
-	    break
+            screensnap()
+            break
 ''' and None
 
 # TouchScreen - using tslib and custom pgm (workaround)
@@ -139,8 +139,8 @@ def touch():
     logger.info('touch()')
     xy = subprocess.check_output(["ts_check"])
     if(xy):
-	logger.info('screen touched'+str(xy))
-	screensnap()
+        logger.info('screen touched'+str(xy))
+        screensnap()
     
 # Screen snapshot 
 # Snapshots go into snapshot subdirectory
@@ -182,58 +182,58 @@ def camera():
     offset = 0	
     loop = 1
     while (loop):
-	#read the pixels
-	pixels_d = sensor.readPixels()
-	# Remap pixels
-	pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
-	#Perform interpolation
-	bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
-	#Draw Image
-	for ix, row in enumerate(bicubic):
-		for jx, pixel in enumerate(row):
-			pygame.draw.rect(lcd, colors[constrain(int(pixel), 0, COLORDEPTH- 1)], (displayPixelHeight * ix, displayPixelWidth * jx, displayPixelHeight, displayPixelWidth))
+        #read the pixels
+        pixels_d = sensor.readPixels()
+        # Remap pixels
+        pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
+        #Perform interpolation
+        bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
+        #Draw Image
+        for ix, row in enumerate(bicubic):
+		    for jx, pixel in enumerate(row):
+			    pygame.draw.rect(lcd, colors[constrain(int(pixel), 0, COLORDEPTH- 1)], (displayPixelHeight * ix, displayPixelWidth * jx, displayPixelHeight, displayPixelWidth))
 	
-	# Flip the screen horizontally to match front facing IP camera
-	surf = pygame.transform.flip(lcd,True,False)
-	lcd.blit(surf,(0,0))
-	# Add buttons (show for X seconds)
-	if (showBtns < 25):
+	    # Flip the screen horizontally to match front facing IP camera
+        surf = pygame.transform.flip(lcd,True,False)
+        lcd.blit(surf,(0,0))
+	    # Add buttons (show for X seconds)
+        if (showBtns < 25):
             fnt = pygame.font.Font(None, 15)
             mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
             for k,v in mode_buttons.items():
                 text_surface = fnt.render('%s'%k, True, GRAY)
                 rect = text_surface.get_rect(center=v)
                 lcd.blit(text_surface, rect)
-	showBtns = showBtns + 1
-	# Add Data to screen
-        fnt = pygame.font.Font(None, 15)
-        cur_date = datetime.datetime.now().strftime('%a  %d  %b %H : %M : %S %Z %Y') 
-        text_surface = fnt.render(cur_date, True, GRAY)
-        lcd.blit(text_surface, (10,220))
-	text = "Min  = {0:.0f} C".format(min(pixels_d))
-        text_surface = fnt.render(text, True, GRAY)
-        lcd.blit(text_surface, (10,20))
-	text = "Max = {0:.0f} C".format(max(pixels_d))
-        text_surface = fnt.render(text, True, GRAY)
-        lcd.blit(text_surface, (10,30))
-	pygame.display.update()
-	# GPIO Button Press 
-	if GPIO.input(BTN4) == GPIO.LOW:
-		logger.info("stopping camera()")
-		loop = 0
-		time.sleep(0.5)	
-	if GPIO.input(BTN2) == GPIO.LOW:
-		logger.info("UP")
-		offset = offset - 1
-    		showBtns = 0
-		time.sleep(0.5)	
-	if GPIO.input(BTN3) == GPIO.LOW:
-		logger.info("DOWN")
-		offset = offset + 1
-    		showBtns = 0
-		time.sleep(0.5)	
-	# Touch Screen Snapshot
-	touch() 
+                showBtns = showBtns + 1
+	            # Add Data to screen
+                fnt = pygame.font.Font(None, 15)
+                cur_date = datetime.datetime.now().strftime('%a  %d  %b %H : %M : %S %Z %Y') 
+                text_surface = fnt.render(cur_date, True, GRAY)
+                lcd.blit(text_surface, (10,220))
+                text = "Min  = {0:.0f} C".format(min(pixels_d))
+                text_surface = fnt.render(text, True, GRAY)
+                lcd.blit(text_surface, (10,20))
+                text = "Max = {0:.0f} C".format(max(pixels_d))
+                text_surface = fnt.render(text, True, GRAY)
+                lcd.blit(text_surface, (10,30))
+                pygame.display.update()
+        # GPIO Button Press 
+	    if GPIO.input(BTN4) == GPIO.LOW:
+	        logger.info("stopping camera()")
+	        loop = 0
+	        time.sleep(0.5)	
+        if GPIO.input(BTN2) == GPIO.LOW:
+            logger.info("UP")
+            offset = offset - 1
+            showBtns = 0
+            time.sleep(0.5)	
+        if GPIO.input(BTN3) == GPIO.LOW:
+            logger.info("DOWN")
+            offset = offset + 1
+            showBtns = 0
+            time.sleep(0.5)	
+            # Touch Screen Snapshot
+            touch() 
 
 
 ######
@@ -301,30 +301,30 @@ displayMode()
 time.sleep(.1)
 	
 while True:
-	# GPIO Button Press to exit
-	if GPIO.input(BTN1) == GPIO.LOW:
+# GPIO Button Press to exit
+    if GPIO.input(BTN1) == GPIO.LOW:
 		cleartft(BLACK)
 		time.sleep(5)
 		#exit(0)
 
-	if GPIO.input(BTN4) == GPIO.LOW:
+    if GPIO.input(BTN4) == GPIO.LOW:
 		cleartft(BLACK)
 		time.sleep(0.1)	
 		camera()
 		displayMode()
 		time.sleep(0.5)	
 
-	if GPIO.input(BTN2) == GPIO.LOW:
-                # Btn 2
+    if GPIO.input(BTN2) == GPIO.LOW:
+        # Btn 2
 		future("Btn 2")
 		displayMode()
 		time.sleep(0.5)	
 	
-	if GPIO.input(BTN3) == GPIO.LOW:
-                # Btn 3
-		future("Btn 3")
-		displayMode()
-		time.sleep(0.5)	
+    if GPIO.input(BTN3) == GPIO.LOW:
+        # Btn 3
+        future("Btn 3")
+        displayMode()
+        time.sleep(0.5)	
         time.sleep(.1)
 
 ### END
