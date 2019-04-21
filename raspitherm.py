@@ -218,7 +218,7 @@ def camera():
                 lcd.blit(text_surface, (10,30))
                 pygame.display.update()
         # GPIO Button Press 
-	    if GPIO.input(BTN4) == GPIO.LOW:
+        if GPIO.input(BTN4) == GPIO.LOW:
 	        logger.info("stopping camera()")
 	        loop = 0
 	        time.sleep(0.5)	
