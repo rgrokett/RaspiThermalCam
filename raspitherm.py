@@ -14,7 +14,8 @@
 # Version 0.5 2017.11.26 - initial release
 #         0.7 2017.12.01 - added touch screen snapshots (via workaround) 
 #         0.8 2017.12.02 - expanded camera screen added data 
-#	  0.8.1 - minor update to screen data format
+#         0.8.1 - minor update to screen data format
+#         0.8.2 - Removed tab chars
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -35,20 +36,20 @@ from colour import Color
 
 
 ##### VARIABLES
-DEBUG	= 0	# Debug 0/1 off/on (writes to debug.log)
+DEBUG   = 0 # Debug 0/1 off/on (writes to debug.log)
 
 # INITIAL TEMPERATURE VALUES
-MINTEMP = 26	# Low temp range (blue)
-MAXTEMP = 32	# High temp range (red)
+MINTEMP = 26    # Low temp range (blue)
+MAXTEMP = 32    # High temp range (red)
 
-COLORDEPTH = 1024	
+COLORDEPTH = 1024   
 MARGIN = 20
 
 # GPIO BUTTONS
-BTN1	= 17	# Top	
-BTN2	= 22	# Second
-BTN3	= 23	# Third
-BTN4	= 27	# Fourth
+BTN1    = 17    # Top   
+BTN2    = 22    # Second
+BTN3    = 23    # Third
+BTN4    = 27    # Fourth
 
 # FULL SCREEN COLORS
 WHITE = (255,255,255)
@@ -177,9 +178,9 @@ def camera():
     lcd = pygame.display.set_mode((F_WIDTH, F_HEIGHT))
     lcd.fill(BLUE)
     pygame.display.update()
-    time.sleep(0.5)	
+    time.sleep(0.5) 
     showBtns = 0
-    offset = 0	
+    offset = 0  
     loop = 1
     while (loop):
         #read the pixels
@@ -190,13 +191,13 @@ def camera():
         bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
         #Draw Image
         for ix, row in enumerate(bicubic):
-		    for jx, pixel in enumerate(row):
-			    pygame.draw.rect(lcd, colors[constrain(int(pixel), 0, COLORDEPTH- 1)], (displayPixelHeight * ix, displayPixelWidth * jx, displayPixelHeight, displayPixelWidth))
-	
-	    # Flip the screen horizontally to match front facing IP camera
+            for jx, pixel in enumerate(row):
+                pygame.draw.rect(lcd, colors[constrain(int(pixel), 0, COLORDEPTH- 1)], (displayPixelHeight * ix, displayPixelWidth * jx, displayPixelHeight, displayPixelWidth))
+    
+        # Flip the screen horizontally to match front facing IP camera
         surf = pygame.transform.flip(lcd,True,False)
         lcd.blit(surf,(0,0))
-	    # Add buttons (show for X seconds)
+        # Add buttons (show for X seconds)
         if (showBtns < 25):
             fnt = pygame.font.Font(None, 15)
             mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
@@ -205,7 +206,7 @@ def camera():
                 rect = text_surface.get_rect(center=v)
                 lcd.blit(text_surface, rect)
                 showBtns = showBtns + 1
-	            # Add Data to screen
+                # Add Data to screen
                 fnt = pygame.font.Font(None, 15)
                 cur_date = datetime.datetime.now().strftime('%a  %d  %b %H : %M : %S %Z %Y') 
                 text_surface = fnt.render(cur_date, True, GRAY)
@@ -219,19 +220,19 @@ def camera():
                 pygame.display.update()
         # GPIO Button Press 
         if GPIO.input(BTN4) == GPIO.LOW:
-	        logger.info("stopping camera()")
-	        loop = 0
-	        time.sleep(0.5)	
+            logger.info("stopping camera()")
+            loop = 0
+            time.sleep(0.5) 
         if GPIO.input(BTN2) == GPIO.LOW:
             logger.info("UP")
             offset = offset - 1
             showBtns = 0
-            time.sleep(0.5)	
+            time.sleep(0.5) 
         if GPIO.input(BTN3) == GPIO.LOW:
             logger.info("DOWN")
             offset = offset + 1
             showBtns = 0
-            time.sleep(0.5)	
+            time.sleep(0.5) 
             # Touch Screen Snapshot
             touch() 
 
@@ -299,32 +300,32 @@ displayMode()
 
 # Wait for sensor initialize
 time.sleep(.1)
-	
+    
 while True:
 # GPIO Button Press to exit
     if GPIO.input(BTN1) == GPIO.LOW:
-		cleartft(BLACK)
-		time.sleep(5)
-		#exit(0)
+        cleartft(BLACK)
+        time.sleep(5)
+        #exit(0)
 
     if GPIO.input(BTN4) == GPIO.LOW:
-		cleartft(BLACK)
-		time.sleep(0.1)	
-		camera()
-		displayMode()
-		time.sleep(0.5)	
+        cleartft(BLACK)
+        time.sleep(0.1) 
+        camera()
+        displayMode()
+        time.sleep(0.5) 
 
     if GPIO.input(BTN2) == GPIO.LOW:
         # Btn 2
-		future("Btn 2")
-		displayMode()
-		time.sleep(0.5)	
-	
+        future("Btn 2")
+        displayMode()
+        time.sleep(0.5) 
+    
     if GPIO.input(BTN3) == GPIO.LOW:
         # Btn 3
         future("Btn 3")
         displayMode()
-        time.sleep(0.5)	
+        time.sleep(0.5) 
         time.sleep(.1)
 
 ### END
