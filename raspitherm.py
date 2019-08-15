@@ -16,6 +16,7 @@
 #         0.8 2017.12.02 - expanded camera screen added data 
 #         0.8.1 - minor update to screen data format
 #         0.8.2 - Removed tab chars
+#         0.8.3 - Fix outdent for camera() display update
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -217,7 +218,7 @@ def camera():
                 text = "Max = {0:.0f} C".format(max(pixels_d))
                 text_surface = fnt.render(text, True, GRAY)
                 lcd.blit(text_surface, (10,30))
-                pygame.display.update()
+        pygame.display.update()
         # GPIO Button Press 
         if GPIO.input(BTN4) == GPIO.LOW:
             logger.info("stopping camera()")
@@ -233,8 +234,8 @@ def camera():
             offset = offset + 1
             showBtns = 0
             time.sleep(0.5) 
-            # Touch Screen Snapshot
-            touch() 
+        # Touch Screen Snapshot
+        touch() 
 
 
 ######
