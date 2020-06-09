@@ -35,6 +35,7 @@ from scipy.interpolate import griddata
 from pygame.locals import *
 from colour import Color
 
+pygame.init()
 
 ##### VARIABLES
 DEBUG   = 0 # Debug 0/1 off/on (writes to debug.log)
@@ -138,11 +139,11 @@ def touch():
 # due to bug in SDL lib with using pygame.
 # Checks for screen touch
 def touch():
-    logger.info('touch()')
-    xy = subprocess.check_output(["ts_check"])
-    if(xy):
-        logger.info('screen touched'+str(xy))
-        screensnap()
+    logger.info('touch() -- removed. No library tslib in Raspbian Buster.')
+#    xy = subprocess.check_output(["ts_check"])
+#    if(xy):
+#        logger.info('screen touched'+str(xy))
+#        screensnap()
     
 # Screen snapshot 
 # Snapshots go into snapshot subdirectory
@@ -290,7 +291,7 @@ displayPixelHeight = height / 30
 
 
 # PYGAME SCREEN
-pygame.init()
+#pygame.init() -- moved to beginning of the script because pygame3.
 pygame.mouse.set_visible(False)
 cleartft(BLACK)
 
