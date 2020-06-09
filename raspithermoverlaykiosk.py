@@ -19,7 +19,8 @@
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
 
-from Adafruit_AMG88xx import Adafruit_AMG88xx
+#from Adafruit_AMG88xx import Adafruit_AMG88xx
+import adafruit_amg88xx, board, busio
 import pygame
 import os
 import math
@@ -150,11 +151,11 @@ def touch():
 # due to bug in SDL lib with using pygame.
 # Checks for screen touch
 def touch():
-    logger.info('touch()')
-    xy = subprocess.check_output(["ts_check"])
-    if(xy):
-        logger.info('screen touched'+str(xy))
-        screensnap()
+    logger.info('touch() -- removed. No library tslib in Raspbian Buster.')
+#    xy = subprocess.check_output(["ts_check"])
+#    if(xy):
+#        logger.info('screen touched'+str(xy))
+#        screensnap()
     
 # Screen snapshot 
 # Snapshots go into snapshot subdirectory
@@ -193,13 +194,16 @@ def ir_camera():
     pygame.display.update()
     time.sleep(0.5)
     showBtns = 0
-    offset = 0
+    offset = 15 #was zero - works better this way with new adafruit library.
     loop = 1
     while (loop):
-        #read the pixels
-        pixels_d = sensor.readPixels()
+        # read the pixels
+ #        pixels_d = sensor.readPixels()
+        pixels_d = []
+        for row in sensor.pixels:
+            pixels_d = pixels_d + row
         # Remap pixels
-        pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
+        pixels_d = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
         #Perform interpolation
         bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
         #Draw Image
@@ -283,7 +287,11 @@ def overlay():
         draw = ImageDraw.Draw(pad)
 
         #read the pixels
-        pixels_d = sensor.readPixels()
+#        pixels_d = sensor.readPixels()
+        pixels_d = []
+        for row in sensor.pixels:
+            pixels_d = pixels_d + row
+        # Remap pixels
         # Remap pixels
         pixels = [map(p, MINTEMP+sensitivity, MAXTEMP+sensitivity, 0, COLORDEPTH - 1) for p in pixels_d]
         #Perform interpolation
@@ -363,7 +371,9 @@ GPIO.setup(BTN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BTN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 ## Thermal Sensor
-sensor = Adafruit_AMG88xx()
+#sensor = Adafruit_AMG88xx()
+i2c = busio.I2C(board.SCL, board.SDA)
+sensor = adafruit_amg88xx.AMG88XX(i2c)
 points = [(math.floor(ix / 8), (ix % 8)) for ix in range(0, 64)]
 grid_x, grid_y = np.mgrid[0:7:32j, 0:7:32j]
 

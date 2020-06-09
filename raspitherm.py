@@ -17,6 +17,7 @@
 #         0.8.1 - minor update to screen data format
 #         0.8.2 - Removed tab chars
 #         0.8.3 - Fix outdent for camera() display update
+#         0.9   - updated to with with new adafruit libraries on Python3. Removed touch function (broke on Buster).
 #
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
@@ -183,7 +184,7 @@ def camera():
     pygame.display.update()
     time.sleep(0.5) 
     showBtns = 0
-    offset = 0  
+    offset = 15 #was zero - works better this way with new adafruit library.
     loop = 1
     while (loop):
         #read the pixels
