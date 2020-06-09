@@ -21,7 +21,8 @@
 # License: GPLv3, see: www.gnu.org/licenses/gpl-3.0.html
 #
 
-from Adafruit_AMG88xx import Adafruit_AMG88xx
+#from Adafruit_AMG88xx import Adafruit_AMG88xx
+import adafruit_amg88xx, board, busio
 import pygame
 import os
 import math
@@ -186,11 +187,14 @@ def camera():
     loop = 1
     while (loop):
         #read the pixels
-        pixels_d = sensor.readPixels()
+#        pixels_d = sensor.readPixels()
+        pixels_d = []
+        for row in sensor.pixels:
+            pixels_d = pixels_d + row
         # Remap pixels
-        pixels = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
+        pixels_d = [map(p, MINTEMP+offset, MAXTEMP+offset, 0, COLORDEPTH - 1) for p in pixels_d]
         #Perform interpolation
-        bicubic = griddata(points, pixels, (grid_x, grid_y), method='cubic')
+        bicubic = griddata(points, pixels_d, (grid_x, grid_y), method='cubic')
         #Draw Image
         for ix, row in enumerate(bicubic):
             for jx, pixel in enumerate(row):
@@ -199,7 +203,7 @@ def camera():
         # Flip the screen horizontally to match front facing IP camera
         surf = pygame.transform.flip(lcd,True,False)
         lcd.blit(surf,(0,0))
-        # Add buttons (show for X seconds)
+        # Add buttons (show for X wseconds)
         if (showBtns < 25):
             fnt = pygame.font.Font(None, 15)
             mode_buttons = {'PWR ->':(280,40), '   UP ->':(280,100), 'DOWN->':(280,160), 'MODE->':(280,220)}
@@ -272,7 +276,9 @@ GPIO.setup(BTN3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BTN4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 ## Thermal Sensor
-sensor = Adafruit_AMG88xx()
+#sensor = Adafruit_AMG88xx()
+i2c = busio.I2C(board.SCL, board.SDA)
+sensor = adafruit_amg88xx.AMG88XX(i2c)
 points = [(math.floor(ix / 8), (ix % 8)) for ix in range(0, 64)]
 grid_x, grid_y = np.mgrid[0:7:32j, 0:7:32j]
 

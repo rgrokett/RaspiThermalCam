@@ -48,16 +48,16 @@ else
 fi
 
 echo "Verifying Adafruit packages for AMG8833..."
-X=`pip3 list |grep Adafruit-AMG88xx`
+X=`pip3 list |grep adafruit-circuitpython-amg88xx`
 
 if [ -z "$X" ];
 then
-        echo "NO Adafruit_AMG88xx_python package! SEE DOCS."
+        echo "NO adafruit-circuitpython-amg88xx package! SEE DOCS."
         echo "Installing required Python 3 modules..."
-        sudo pip3 install Adafruit_AMG88xx
+        sudo pip3 install adafruit-circuitpython-amg88xx
 	#exit
 else
-        echo "Found Adafruit_AMG88xx_python package OK"
+        echo "Found adafruit-circuitpython-amg88xx package OK"
 fi
 
 echo "Verifying buttons are installed..."

@@ -74,6 +74,7 @@ Wire up the thermal camera sensor and the PiTFT as outlined in the PDF in this r
 ```
 git clone https://github.com/rgrokett/RaspiThermalCam.git
 cd RaspiThermalCam
+chmod +x ./buster-install.sh
 ./buster-install.sh
 ```
 This will install the PiTFT and thermal sensor driver, if necessary. During PiTFT driver installation, select "4" for 2.8" capacitive PiTFT, then select "1" for 90 degree rotation, then select "no" for console on screen, then select "yes" for mirror HDMI output. Finally, select "no" to reboot.
