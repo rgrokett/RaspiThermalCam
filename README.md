@@ -50,7 +50,8 @@ Zero Owners:  A Raspberry Pi Zero can be used instead of a Pi 3, sacrificing spe
 - Box to hold battery, computer and camera 
 
 ### Installation
-You **MUST** have the Adafruit tutorial version installed and working before using this. This project just replaces the Adafruit thermalcam.py with a new python program. IT WILL NOT WORK OTHERWISE. 
+#### Pre Raspbian Buster:
+You **MUST** have the Adafruit tutorial version installed and working before using this. This project just replaces the Adafruit thermalcam.py with a new python program. IT WILL NOT WORK OTHERWISE.
 
 Also, it expects the assembled version of the Adafruit 2.8" 320x240 PiTFT Plus screen otherwise the screen layout will NOT ALIGN and the GPIO buttons will NOT FUNCTION as expected. The Raspbian GUI is NOT NEEDED, so uses their custom Jessie Lite. 
 
@@ -65,6 +66,25 @@ cd RaspiThermalCam
 sudo reboot
 ```
 
+#### Raspbian Buster Lite:
+Wire up the thermal camera sensor and the PiTFT as outlined in the PDF in this repository. Make the necessary changes to raspi-config as outlined in the same PDF.
+
+1. Log into the Raspberry Pi with SSH or keyboard (defaults to "pi/raspberry")
+2. Download and install the enhanced thermal program:
+```
+git clone https://github.com/rgrokett/RaspiThermalCam.git
+cd RaspiThermalCam
+./buster-install.sh
+```
+This will install the PiTFT and thermal sensor driver, if necessary. During PiTFT driver installation, select "4" for 2.8" capacitive PiTFT, then select "1" for 90 degree rotation, then select "no" for console on screen, then select "yes" for mirror HDMI output. Finally, select "no" to reboot.
+
+The installer script will continue with the RaspiThermalCam installation. When complete, type:
+
+```
+sudo reboot
+```
+
+#### After Installation:
 Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if needed.  
 
 The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
@@ -77,7 +97,7 @@ The 4 buttons on the TFT screen have been re-mapped to GPIO functions as shown:
 ### Snapshot
 Due to a bug in the Python SDL library, the touch screen doesn’t currently work with PyGame software.  So I used the tslib and a small custom C program to detect screen touches.
 
-To take a screenshot of a thermal image, just touch anywhere on the touch screen.  The screen will flash to let you know an image has been taken.
+Unfortunately, this broke in Raspbian Buster. Otherwise, to take a screenshot of a thermal image, just touch anywhere on the touch screen.  The screen will flash to let you know an image has been taken.
 Images are saved to the /home/pi/snapshot subdirectory as  PNG files. These can be transferred to your PC using:
 
 Mac/Linux:
