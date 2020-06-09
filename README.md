@@ -85,6 +85,16 @@ The installer script will continue with the RaspiThermalCam installation. When c
 sudo reboot
 ```
 
+#### Overlay Kiosk:
+In raspi-config, activate camera. Then, install using buster-install.sh.
+Afterwards, type:
+```
+sudo pip3 install picamera
+contab -e
+```
+and edit crontab to remove old script, and instead point to raspithermalcamoverlaykiosk.sh.
+
+
 #### After Installation:
 Once rebooted, you should see the new PiEyeR screen. See Troubleshooting if needed.  
 
