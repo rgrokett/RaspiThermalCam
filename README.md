@@ -72,7 +72,7 @@ Wire up the thermal camera sensor and the PiTFT as outlined in the PDF in this r
 1. Log into the Raspberry Pi with SSH or keyboard (defaults to "pi/raspberry")
 2. Download and install the enhanced thermal program:
 ```
-git clone https://github.com/rgrokett/RaspiThermalCam.git
+git clone https://github.com/tenbergen/RaspiThermalCam.git
 cd RaspiThermalCam
 chmod +x ./buster-install.sh
 ./buster-install.sh
