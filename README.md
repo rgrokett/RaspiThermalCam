@@ -3,6 +3,8 @@
 
 version 0.8.2 - 2017-12-03
 
+
+
 ### Overview
 The Adafruit AMG8833 IR Thermal Camera board can provide a “FLIR™”-like imaging camera at about 1/10th the price of previous IR Thermal imaging units.  Of course, the resolution and sensitivity are not as high as more advanced cameras, but hey, for $39 it’s a great deal.  
 
